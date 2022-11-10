@@ -17,7 +17,7 @@ interface KoalaDao {
     fun findByTitle(title: String): Koala
 
     @Insert
-    fun insertAll(vararg koalas: Koala)
+    fun insertAll(koalas: Koala)
 
     @Delete
     fun delete(koala: Koala)
