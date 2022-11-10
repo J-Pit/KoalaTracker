@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 import java.util.*
 @Entity
 data class Koala(
-    @PrimaryKey val id : Int,
-        val title : String,
-        val date : String,
-        val place : String,
+    @PrimaryKey var id : Int = 1,
+    var title : String = "",
+    var date : Date = Date(),
+    var place : String = "",
 )
