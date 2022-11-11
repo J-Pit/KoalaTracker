@@ -1,22 +1,27 @@
 package com.example.csc202assignment
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.util.*
 
 class KoalaListViewModel : ViewModel() {
-    val koalas = mutableListOf<Koala>()
-
+   private val koalaRepository = KoalaRepository.get()
+    private val _koalas: MutableStateFlow<List<Koala>> = MutableStateFlow(emptyList())
+    val koalas: StateFlow<List<Koala>>
+        get() = _koalas.asStateFlow()
     init {
-    for (i in 0 until 100){
-        val koala = Koala()
+        viewModelScope.launch {
+            koalaRepository.getKoalas().collect{
+                _koalas.value = it
 
-        koala.id = i
-        koala.title = "koala found"
-        koala.date = Date()
-        koala.place = "forest"
-        koalas += koala
+            }
+        }
     }
-
-
+     fun addKoala(koala: Koala) {
+        koalaRepository.addKoala(koala)
     }
 }
