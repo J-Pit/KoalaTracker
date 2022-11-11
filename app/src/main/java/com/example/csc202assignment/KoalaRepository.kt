@@ -27,6 +27,12 @@ class KoalaRepository private constructor(context: Context, private val coroutin
             database.koalaDao().updateKoala(koala)
         }
     }
+
+    fun deleteKoala(koala: Koala){
+        executor.execute {
+            database.koalaDao().delete(koala)
+        }
+    }
      fun addKoala(koala: Koala) {
         executor.execute{
         database.koalaDao().insertAll(koala)

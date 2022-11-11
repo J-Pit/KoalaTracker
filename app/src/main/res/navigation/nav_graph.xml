@@ -12,6 +12,9 @@
         <action
             android:id="@+id/show_koala_detail"
             app:destination="@id/koalaFragment" />
+        <action
+            android:id="@+id/action_koalaListFragment_to_webView"
+            app:destination="@id/webView" />
     </fragment>
     <fragment
         android:id="@+id/koalaFragment"
@@ -30,6 +33,9 @@
         <action
             android:id="@+id/action_koalaFragment_to_imageDialog"
             app:destination="@id/imageDialog" />
+        <action
+            android:id="@+id/toList"
+            app:destination="@id/koalaListFragment" />
     </fragment>
     <dialog
         android:id="@+id/datePickerFragment"
@@ -48,4 +54,8 @@
             app:argType="string"
             app:nullable="true" />
     </dialog>
+    <fragment
+        android:id="@+id/webView"
+        android:name="com.example.csc202assignment.webView"
+        android:label="webView" />
 </navigation>

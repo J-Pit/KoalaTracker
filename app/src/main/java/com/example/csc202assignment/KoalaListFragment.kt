@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.View.OnCreateContextMenuListener
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainer
 import androidx.fragment.app.viewModels
@@ -49,7 +50,8 @@ class KoalaListFragment : Fragment() {
                 findNavController().navigate(KoalaListFragmentDirections.showKoalaDetail(koala.id))
                 true
             }
-
+            R.id.help_koala -> {findNavController().navigate(KoalaListFragmentDirections.actionKoalaListFragmentToWebView())
+            true}
             else -> return super.onOptionsItemSelected(item)
         }
     }

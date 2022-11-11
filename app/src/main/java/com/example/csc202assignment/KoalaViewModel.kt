@@ -12,26 +12,34 @@ class KoalaViewModel(koalaId: UUID) : ViewModel() {
     private val koalaRepository = KoalaRepository.get()
     private val _koala: MutableStateFlow<Koala?> = MutableStateFlow(null)
     val koala: StateFlow<Koala?> = _koala.asStateFlow()
+
     init {
         viewModelScope.launch {
             _koala.value = koalaRepository.getKoala(koalaId)
         }
     }
+
     fun updateKoala(onUpdate: (Koala) -> Koala) {
         _koala.update { oldKoala ->
             oldKoala?.let { onUpdate(it) }
         }
     }
+
+    fun deleteKoala(koala: Koala) {
+        koalaRepository.deleteKoala(koala)
+    }
+
     override fun onCleared() {
         super.onCleared()
         koala.value?.let { koalaRepository.updateKoala(it) }
     }
-}
 
-class KoalaDetailViewModelFactory(
-    private val koalaId: UUID
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return KoalaViewModel(koalaId) as T
+
+    class KoalaDetailViewModelFactory(
+        private val koalaId: UUID
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return KoalaViewModel(koalaId) as T
+        }
     }
 }

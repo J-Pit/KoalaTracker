@@ -11,6 +11,15 @@
         android:visible="true"
         app:showAsAction="ifRoom|withText" />
 
+    <item
+        android:id="@+id/help_koala"
+        android:checkable="false"
+        android:enabled="true"
+        android:icon="@drawable/ic_help"
+        android:title="Help"
+        android:visible="true"
+        app:showAsAction="ifRoom|withText" />
+
 
 
 </menu>

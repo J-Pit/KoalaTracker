@@ -38,7 +38,7 @@ class KoalaFragment : Fragment() {
 
     private val args: KoalaFragmentArgs by navArgs()
     val koalaViewModel: KoalaViewModel by viewModels {
-        KoalaDetailViewModelFactory(args.koalaId)
+        KoalaViewModel.KoalaDetailViewModelFactory(args.koalaId)
     }
 
     companion object {
@@ -71,6 +71,7 @@ class KoalaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
+
             koalaTitle.doOnTextChanged { text, _, _, _ ->
                 koalaViewModel.updateKoala { oldKoala ->
                     oldKoala.copy(title = text.toString())
@@ -129,6 +130,10 @@ class KoalaFragment : Fragment() {
             if (koalaTitle.text.toString() != koala.title) {
                 koalaTitle.setText(koala.title)
             }
+            if (koalaPlace.text.toString() != koala.place) {
+                koalaPlace.setText(koala.place)
+            }
+
 
             koalaDate.text = koala.date.toString()
             koalaDate.setOnClickListener {
@@ -139,8 +144,11 @@ class KoalaFragment : Fragment() {
             }
             koalaLat.text = koala.latitude.toString()
             koalaLong.text = koala.longitude.toString()
-            koalaPlace.setText(koala.place)
             updatePhoto(koala.photoFileName)
+            koalaDelete.setOnClickListener{
+                koalaViewModel.deleteKoala(koala)
+                findNavController().navigate(KoalaFragmentDirections.toList())
+            }
 
         }
     }
