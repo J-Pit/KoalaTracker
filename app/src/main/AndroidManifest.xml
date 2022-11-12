@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.csc202assignment">
+<manifest
 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.csc202assignment">
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <application
         android:name=".KoalaApplication"
         android:allowBackup="true"
@@ -31,7 +35,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/files"/>
         </provider>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBFTOwkMKPSdNeA_mVSBM-yH4Y5HymHWRI"/>
     </application>
     <uses-feature android:name="android.hardware.camera"
         android:required="false"/>
+
 </manifest>

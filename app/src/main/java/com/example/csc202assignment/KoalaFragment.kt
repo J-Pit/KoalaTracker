@@ -1,8 +1,11 @@
 package com.example.csc202assignment
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -15,7 +18,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.doOnLayout
 import androidx.core.widget.doOnTextChanged
@@ -29,12 +34,22 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.csc202assignment.databinding.KoalaFragmentBinding
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.GoogleApiAvailabilityLight
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationToken
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.gms.tasks.OnTokenCanceledListener
 import kotlinx.coroutines.launch
 import java.io.File
 import java.util.Date
 import java.util.UUID
 private const val ARG_KOALA_ID = "koala_id"
 class KoalaFragment : Fragment() {
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private val args: KoalaFragmentArgs by navArgs()
     val koalaViewModel: KoalaViewModel by viewModels {
@@ -60,11 +75,11 @@ class KoalaFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding =
-            KoalaFragmentBinding.inflate(
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
+        _binding = KoalaFragmentBinding.inflate(
                 layoutInflater, container,
-                false
-            )
+                false)
         return binding.root
     }
 
@@ -125,6 +140,7 @@ class KoalaFragment : Fragment() {
 
 
 
+
     private fun updateUi(koala: Koala) {
         binding.apply {
             if (koalaTitle.text.toString() != koala.title) {
@@ -142,19 +158,55 @@ class KoalaFragment : Fragment() {
                 )
 
             }
-            koalaLat.text = koala.latitude.toString()
-            koalaLong.text = koala.longitude.toString()
+
             updatePhoto(koala.photoFileName)
-            koalaDelete.setOnClickListener{
+            koalaDelete.setOnClickListener {
                 koalaViewModel.deleteKoala(koala)
                 findNavController().navigate(KoalaFragmentDirections.toList())
             }
-            koalaPhoto.setOnClickListener{
-                findNavController().navigate(KoalaFragmentDirections.actionKoalaFragmentToImageDialog(koala.photoFileName))
+            koalaPhoto.setOnClickListener {
+                findNavController().navigate(
+                    KoalaFragmentDirections.actionKoalaFragmentToImageDialog(
+                        koala.photoFileName
+                    )
+                )
             }
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                    requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                    fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, object : CancellationToken(){
+                        override fun onCanceledRequested(p0: OnTokenCanceledListener) = CancellationTokenSource().token
+                        override fun isCancellationRequested() = false
+                    }).addOnSuccessListener{location : Location? ->
+                            location?.let {
+                                koala.latitude = location.latitude
+                                koala.longitude = location.longitude
+                                koalaLocation.text =
+                                    koala.latitude.toString() + " " + koala.longitude.toString()
+                            }
+                        }
+            }
+            koalaShare.setOnClickListener {
+                val reportIntent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, "Koala found at " + koala.place + "on " + koala.date.toString())
+                    putExtra(
+                        Intent.EXTRA_SUBJECT,
+                       "Koala Found"
+                    )
+                }
+                val chooserIntent = Intent.createChooser(
+                    reportIntent,
+                   "Send koala report")
 
-
+                startActivity(chooserIntent)
+            }
         }
+
     }
     private fun updatePhoto(photoFileName: String?) {
         if (binding.koalaPhoto.tag != photoFileName) {
