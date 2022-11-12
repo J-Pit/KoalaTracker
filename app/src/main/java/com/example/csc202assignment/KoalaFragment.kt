@@ -149,6 +149,10 @@ class KoalaFragment : Fragment() {
                 koalaViewModel.deleteKoala(koala)
                 findNavController().navigate(KoalaFragmentDirections.toList())
             }
+            koalaPhoto.setOnClickListener{
+                findNavController().navigate(KoalaFragmentDirections.actionKoalaFragmentToImageDialog(koala.photoFileName))
+            }
+
 
         }
     }
