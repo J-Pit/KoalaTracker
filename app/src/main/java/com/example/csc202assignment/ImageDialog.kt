@@ -10,14 +10,11 @@ import java.io.File
 
 class ImageDialog : DialogFragment() {
     private val args: ImageDialogArgs by navArgs()
-    private var _binding: ImagedialogBinding? = null
-    private val binding
-        get() = checkNotNull(_binding) {
-            "Cannot access binding because it is null. Is the view visible?"
-        }
+    private lateinit var binding: ImagedialogBinding
+
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        _binding = ImagedialogBinding.inflate(layoutInflater)
+        binding = ImagedialogBinding.inflate(layoutInflater)
         val photoFile = args.image?.let {
             File(requireContext().applicationContext.filesDir, it)
         }
