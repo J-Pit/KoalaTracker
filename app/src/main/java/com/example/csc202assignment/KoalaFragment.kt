@@ -158,6 +158,9 @@ class KoalaFragment : Fragment() {
                 )
 
             }
+            koalaMap.setOnClickListener{findNavController().navigate(
+                KoalaFragmentDirections.actionKoalaFragmentToMapFragment()
+            )}
 
             updatePhoto(koala.photoFileName)
             koalaDelete.setOnClickListener {

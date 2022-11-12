@@ -36,6 +36,9 @@
         <action
             android:id="@+id/toList"
             app:destination="@id/koalaListFragment" />
+        <action
+            android:id="@+id/action_koalaFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
     <dialog
         android:id="@+id/datePickerFragment"
@@ -58,4 +61,9 @@
         android:id="@+id/webView"
         android:name="com.example.csc202assignment.webView"
         android:label="webView" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.example.csc202assignment.MapFragment"
+        android:label="map_fragment"
+        tools:layout="@layout/map_fragment" />
 </navigation>
