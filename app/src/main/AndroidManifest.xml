@@ -37,7 +37,7 @@
         </provider>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBFTOwkMKPSdNeA_mVSBM-yH4Y5HymHWRI"/>
+            android:value="YOUR-KEY-HERE"/>
     </application>
     <uses-feature android:name="android.hardware.camera"
         android:required="false"/>
