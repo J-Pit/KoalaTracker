@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'org.jetbrains.kotlin.kapt'
+    id 'com.google.devtools.ksp'
     id 'androidx.navigation.safeargs'
 
 }
@@ -10,8 +10,8 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    compileSdk 34
 
-    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.csc202assignment"
@@ -41,6 +41,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    namespace 'com.example.csc202assignment'
 }
 
 dependencies {
@@ -54,9 +55,8 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.4.3'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
-    kapt 'androidx.room:room-compiler:2.4.3'
-    implementation 'androidx.room:room-ktx:2.4.3'
-    kapt "androidx.room:room-compiler:2.4.3"
+    implementation 'androidx.room:room-ktx:2.7.1'
+    ksp("androidx.room:room-compiler:2.5.0")
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
